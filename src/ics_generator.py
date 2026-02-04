@@ -1,4 +1,5 @@
 from ics import Calendar, Event
+from ics.grammar.parse import ContentLine
 from datetime import datetime, timedelta, time
 from dateutil import rrule, parser as dateparser
 import pytz
@@ -80,7 +81,7 @@ def make_calendar_for_locations(locations: List[Dict[str, Any]], tz_name: str = 
             ev.location = address
             ev.description = notes
             # add RRULE via extra property (ics lib supports it)
-            ev.extra.append(('RRULE', f'FREQ=WEEKLY;BYDAY={rrule_byday}'))
+            ev.extra.append(ContentLine('RRULE', f'FREQ=WEEKLY;BYDAY={rrule_byday}'))
             cal.events.add(ev)
     return cal
 

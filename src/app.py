@@ -4,6 +4,7 @@ from .ics_generator import make_calendar_for_locations
 from .config import TIMEZONE, CACHE_DIR
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
+import logging
 
 app = Flask(__name__)
 
@@ -54,11 +55,21 @@ def generate_and_cache():
     _cached['both'] = c_both.serialize()
 
 
+def safe_generate_and_cache():
+    try:
+        generate_and_cache()
+    except Exception:
+        logging.exception("generate_and_cache failed")
+
+
 def start_scheduler():
     scheduler = BackgroundScheduler()
     # run at startup and then periodically
-    generate_and_cache()
-    scheduler.add_job(generate_and_cache, 'interval', minutes=int(os.getenv('UPDATE_INTERVAL_MINUTES', 1440)))
+    try:
+        generate_and_cache()
+    except Exception:
+        logging.exception("Initial generate_and_cache failed; continuing and scheduling retries")
+    scheduler.add_job(safe_generate_and_cache, 'interval', minutes=int(os.getenv('UPDATE_INTERVAL_MINUTES', 1440)))
     scheduler.start()
 
 
