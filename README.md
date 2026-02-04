@@ -15,10 +15,10 @@ Next steps:
 - Add tests and CI
 
 Run locally (dev):
-1. python -m venv venv
+1. python3 -m venv venv
 2. source venv/bin/activate
 3. pip install -r requirements.txt
-4. FLASK_ENV=development FLASK_APP=src.app:app flask run
+4. FLASK_ENV=development && FLASK_APP=src.app:app flask run
 
 Run with Docker:
   docker-compose up --build

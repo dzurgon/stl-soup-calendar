@@ -76,7 +76,7 @@ def make_calendar_for_locations(locations: List[Dict[str, Any]], tz_name: str = 
             ev.name = f"{name} - {hline}"
             ev.begin = dtstart
             ev.end = dtend
-            ev.make_all_day(False)
+            ev.make_all_day = False
             ev.location = address
             ev.description = notes
             # add RRULE via extra property (ics lib supports it)
